@@ -1,7 +1,7 @@
 {
     "URL": "http://localhost:3001",
-    "myQQ": 3845964398,
-    "group_ids": [935593102, 1062349114],
+    "myQQ": "3845964398",
+    "group_ids": ["935593102", "1062349114"],
     "AI_BASE_URL": "https://api.deepseek.com",
     "AI_API_KEY": "sk-a4b0498a53b140859274a4ea956e8540"
 }
