@@ -4,7 +4,7 @@ import random
 import time
 from AIChat import AIChat
 
-url = "http://127.0.0.1:3000"
+url = "http://localhost:3001"
 
 group_ids = [935593102, 1062349114]
 
@@ -59,13 +59,14 @@ def chouqian() -> str:
 
 def task():
     message = getMessage()
+    print(message)
     if len(message) >= 22 and message[:21] == "[CQ:at,qq=3845964398]":
         message = message[22:]
         print(message)
     else: 
         print("Passed Info")
         return
-    answer = chouqian()
+    answer = "你刚才说了：" + message
     if not postMessage(answer):
         print("Post Error")
 
