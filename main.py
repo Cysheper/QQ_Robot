@@ -16,7 +16,8 @@ myQQ = config["myQQ"]
 logging.basicConfig(
     filename='app.log',         # 日志文件名
     level=logging.INFO,         # 日志级别
-    format='%(time)s %(levelname)s - %(message)s',  # 日志格式
+    format='%%(asctime)s %(levelname)s - %(message)s',  # 日志格式
+    datefmt='%Y-%m-%d %H:%M:%S', 
     encoding='utf-8'            # 防止中文乱码
 )
 
