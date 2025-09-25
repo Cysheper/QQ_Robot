@@ -39,7 +39,15 @@ def task(id: int):
     if not hasAtMe:
         pass
     else:
-        answer = AIChat.ask(message);
+        if message == "切换默认":
+            answer = AIChat.modifyMod("defaultMod")
+        elif message == "切换猫娘":
+            answer = AIChat.modifyMod("CatGirlMode")
+        elif message == "切换算法大佬" or message == "切换算竞大佬" or message == "切换算法学长":
+            answer = AIChat.modifyMod("CS-Master-Mode")
+        elif message == "切换猫娘加强版":
+            answer = AIChat.modifyMod("CatGirlMode-Strong")
+        else: answer = AIChat.ask(message)
         if not GetAndPost.postMessage(id, answer):
             logging.error(f"Post Error : {message}")
             print("Post Error")

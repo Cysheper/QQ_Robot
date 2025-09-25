@@ -4,14 +4,6 @@ from openai.types.chat import ChatCompletionMessage, ChatCompletionMessageParam
 import json
 import logging
 
-with open("config.json", "r") as f:
-    config = json.load(f)
-
-baseURL = config["AI_BASE_URL"]
-apiKey = config["AI_API_KEY"]
-
-client = OpenAI(api_key=apiKey, base_url=baseURL)
-
 logging.basicConfig(
     filename='app.log',         # 日志文件名
     level=logging.INFO,         # 日志级别
@@ -20,15 +12,33 @@ logging.basicConfig(
     encoding='utf-8'            # 防止中文乱码
 )
 
-defaultAIInfo = config["defaultAIInfo"]
+with open("config.json", "r") as f:
+    config = json.load(f)
 
+baseURL = config["AI_BASE_URL"]
+apiKey = config["AI_API_KEY"]
 
-memory: List[ChatCompletionMessageParam] = [{"role": "system", "content": defaultAIInfo}]
+client = OpenAI(api_key=apiKey, base_url=baseURL)
+
+MOD = config["DefaultMod"]
+
+memory: List[ChatCompletionMessageParam] = [{"role": "system", "content": MOD}]
 
 def clean():
     memory.clear()
-    memory.append({"role": "system", "content": defaultAIInfo})
+    memory.append({"role": "system", "content": MOD})
     logging.info("记忆已清除")
+
+def modifyMod(newMod: str) -> str:
+    global MOD
+    try:
+        MOD = config[newMod]
+    except Exception as e:
+        logging.error(f"模式不存在 {newMod}")
+        return f"Error 模式不存在 {newMod}"
+    clean()
+    logging.info(f"已切换模式: {newMod}")
+    return f"Accepted 已切换模式: {newMod}"
 
 def ask(problem: str) -> str:
     clear = False
