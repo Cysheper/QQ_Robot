@@ -40,13 +40,15 @@ def task(id: int):
         pass
     else:
         if message == "切换默认":
-            answer = AIChat.modifyMod("defaultMod")
+            answer = AIChat.modifyMod("DefaultMod")
         elif message == "切换猫娘":
             answer = AIChat.modifyMod("CatGirlMode")
         elif message == "切换算法大佬" or message == "切换算竞大佬" or message == "切换算法学长":
             answer = AIChat.modifyMod("CS-Master-Mode")
         elif message == "切换猫娘加强版":
             answer = AIChat.modifyMod("CatGirlMode-Strong")
+        elif message[:2] == "切换":
+            answer = "Error: 不存在的模式"
         else: answer = AIChat.ask(message)
         if not GetAndPost.postMessage(id, answer):
             logging.error(f"Post Error : {message}")
@@ -60,6 +62,5 @@ if __name__ == '__main__':
         task(group_id)
         time.sleep(1)
         idx += 1
-        break
 
         

@@ -35,10 +35,10 @@ def modifyMod(newMod: str) -> str:
         MOD = config[newMod]
     except Exception as e:
         logging.error(f"模式不存在 {newMod}")
-        return f"Error 模式不存在 {newMod}"
+        return f"Error: 模式不存在 {newMod}"
     clean()
     logging.info(f"已切换模式: {newMod}")
-    return f"Accepted 已切换模式: {newMod}"
+    return f"Accepted: 已切换模式: {newMod}"
 
 def ask(problem: str) -> str:
     clear = False
@@ -47,7 +47,7 @@ def ask(problem: str) -> str:
         clean()
     if problem == "清除记忆":
         clean()
-        return "记忆已清除"
+        return "Accepted: 记忆已清除"
     try:
         memory.append({"role": "user", "content": problem})
         response = client.chat.completions.create(
@@ -57,9 +57,9 @@ def ask(problem: str) -> str:
         answer = response.choices[0].message.content or ""
         memory.append({"role": "assistant", "content": answer})
         if clear:
-            return "【记忆超限，已清除】" + answer
+            return "[Error: 记忆超限，已清除]" + answer
         else: return answer
     except Exception as e:
         print(f"发生错误: {str(e)}")
-        logging.error(f"AI 发生错误: {str(e)}")
+        logging.error(f"Error: AI 发生错误: {str(e)}")
         return f"抱歉，出现了一个错误: {str(e)}"
