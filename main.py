@@ -25,23 +25,22 @@ def task(id: int):
     messages = GetAndPost.getMessage(id)
     hasAtMe = False
     message = " "
-    print(messages)
     for info in messages:
         if isinstance(info, dict) and info['type'] == 'at' \
             and info['data']['qq'] == myQQ:
             for msg in messages:
-                if isinstance(msg, dict) and msg.get('type') == 'text':
+                if isinstance(msg, dict) and msg['type'] == 'text':
                     hasAtMe = True
                     message += msg['data']['text'] + " "
                     break
             break
     message.strip()
     if not hasAtMe:
-        logging.info(f"passed info : {message}")
         print(f"passed info : {message}")
     else:
-        answer = "你刚才说了：" + message
+        answer = AIChat.ask(message);
         if not GetAndPost.postMessage(id, answer):
+            logging.error(f"Post Error : {message}")
             print("Post Error")
 
 if __name__ == '__main__':
