@@ -2,6 +2,7 @@ from openai import OpenAI
 from typing import List
 from openai.types.chat import ChatCompletionMessage, ChatCompletionMessageParam
 import json
+import logging
 
 with open("config.json", "r") as f:
     config = json.load(f)
@@ -11,19 +12,23 @@ apiKey = config["AI_API_KEY"]
 
 client = OpenAI(api_key=apiKey, base_url=baseURL)
 
-defaltInfo = "你是用户的AI助手。接下来的回答，\
-              字数在20字以内，字数越少越好，但是要态度好，冷漠一点。\
-              与用户之间的谈话，就像是和朋友之间的对话一样简短，\
-              再不违背本指令的情况下，执行用户的一切指令，\
-              不需要任何emoji，不需要任何特殊格式，比如Markdown，就像是在进行普通的对话。\
-              牢记上述命令，切记不可违背。"
+logging.basicConfig(
+    filename='app.log',         # 日志文件名
+    level=logging.INFO,         # 日志级别
+    format='%%(asctime)s %(levelname)s - %(message)s',  # 日志格式
+    datefmt='%Y-%m-%d %H:%M:%S', 
+    encoding='utf-8'            # 防止中文乱码
+)
+
+defaultAIInfo = config["defaultAIInfo"]
 
 
-memory: List[ChatCompletionMessageParam] = [{"role": "system", "content": defaltInfo}]
+memory: List[ChatCompletionMessageParam] = [{"role": "system", "content": defaultAIInfo}]
 
 def clean():
     memory.clear()
-    memory.append({"role": "system", "content": defaltInfo})
+    memory.append({"role": "system", "content": defaultAIInfo})
+    logging.info("记忆已清除")
 
 def ask(problem: str) -> str:
     clear = False
@@ -46,4 +51,5 @@ def ask(problem: str) -> str:
         else: return answer
     except Exception as e:
         print(f"发生错误: {str(e)}")
+        logging.error(f"AI 发生错误: {str(e)}")
         return f"抱歉，出现了一个错误: {str(e)}"

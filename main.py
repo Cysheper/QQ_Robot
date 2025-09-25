@@ -34,9 +34,9 @@ def task(id: int):
                     message += msg['data']['text'] + " "
                     break
             break
-    message.strip()
+    message = message.strip()
     if not hasAtMe:
-        print(f"passed info : {message}")
+        pass
     else:
         answer = AIChat.ask(message);
         if not GetAndPost.postMessage(id, answer):
