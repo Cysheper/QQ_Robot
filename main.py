@@ -1,81 +1,52 @@
-import requests
-import json
-import random
-import time
 from AIChat import AIChat
+from GetAndPost import GetAndPost
+from typing import List, Dict, Any
+import json
+import time
+import logging
 
-url = "http://localhost:3001"
+# 加载配置文件
+with open("config.json", "r") as f:
+    config = json.load(f)
 
-group_ids = [935593102, 1062349114]
+group_ids = config["group_ids"]
+group_id = group_ids[0]
+myQQ = config["myQQ"]
 
-group_id = 935593102
+logging.basicConfig(
+    filename='app.log',         # 日志文件名
+    level=logging.INFO,         # 日志级别
+    format=' %(levelname)s - %(message)s',  # 日志格式
+    encoding='utf-8'            # 防止中文乱码
+)
 
-
-def getMessage():
-    payload = {
-        "group_id": group_id,
-        "message_seq": "",
-        "count": 1,
-        "reverseOrder": "false"
-    }
-    try:
-        data = requests.get(f"{url}/get_group_msg_history", params=payload).json()["data"]
-    except Exception as e:
-        return "Unkown Error"
-
-    message = []
-    if len(data["messages"]) >= 1:
-        message = data["messages"][0]["message"]
-    else: 
-        message = "None Messages"
-    return message
-
-
-def postMessage(message) -> bool:
-    payload = {
-        "group_id": group_id,
-        "message": f"{message}",
-    }
-    info = requests.post(f"{url}/send_group_msg", data=payload).json()
-    if info["status"] == "ok":
-        return True
+def task(id: int):
+    messages = GetAndPost.getMessage(id)
+    hasAtMe = False
+    message = " "
+    for info in messages:
+        if isinstance(info, dict) and info.get('type') == 'at' \
+            and info['data']['qq'] == myQQ:
+            for msg in messages:
+                if isinstance(msg, dict) and msg.get('type') == 'text':
+                    hasAtMe = True
+                    message += msg['data']['text'] + " "
+                    break
+            break
+    message.strip()
+    if not hasAtMe:
+        logging.info(f"passed info : {message}")
     else:
-        return False
-
-
-def chouqian() -> str:
-    num = random.randint(1, 11)
-    if num == 1:
-        return "大吉"
-    elif num <= 4:
-        return "小吉"
-    elif num <= 7:
-        return "中平"
-    elif num <= 9:
-        return "小凶"
-    else:
-        return "大凶"
-
-
-def task():
-    message = getMessage()
-    print(message)
-    if len(message) >= 22 and message[:21] == "[CQ:at,qq=3845964398]":
-        message = message[22:]
-        print(message)
-    else: 
-        print("Passed Info")
-        return
-    answer = "你刚才说了：" + message
-    if not postMessage(answer):
-        print("Post Error")
+        answer = "你刚才说了：" + message
+        if not GetAndPost.postMessage(id, answer):
+            print("Post Error")
 
 if __name__ == '__main__':
     idx = 0
     while True:
         idx %= len(group_ids)
         group_id = group_ids[idx]
-        task()
+        task(group_id)
         time.sleep(1)
         idx += 1
 

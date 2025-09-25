@@ -1,9 +1,13 @@
 from openai import OpenAI
 from typing import List
 from openai.types.chat import ChatCompletionMessage, ChatCompletionMessageParam
+import json
 
-baseURL = "https://api.deepseek.com"
-apiKey = "sk-a4b0498a53b140859274a4ea956e8540"
+with open("config.json", "r") as f:
+    config = json.load(f)
+
+baseURL = config["AI_BASE_URL"]
+apiKey = config["AI_API_KEY"]
 
 client = OpenAI(api_key=apiKey, base_url=baseURL)
 
