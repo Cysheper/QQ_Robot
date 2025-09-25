@@ -16,7 +16,7 @@ myQQ = config["myQQ"]
 logging.basicConfig(
     filename='app.log',         # 日志文件名
     level=logging.INFO,         # 日志级别
-    format=' %(levelname)s - %(message)s',  # 日志格式
+    format='%(time)s %(levelname)s - %(message)s',  # 日志格式
     encoding='utf-8'            # 防止中文乱码
 )
 
@@ -36,6 +36,7 @@ def task(id: int):
     message.strip()
     if not hasAtMe:
         logging.info(f"passed info : {message}")
+        print(f"passed info : {message}")
     else:
         answer = "你刚才说了：" + message
         if not GetAndPost.postMessage(id, answer):
