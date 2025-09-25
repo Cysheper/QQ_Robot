@@ -29,7 +29,7 @@ def task(id: int):
         if isinstance(info, dict) and info['type'] == 'at' \
             and info['data']['qq'] == myQQ:
             for msg in messages:
-                if isinstance(msg, dict) and msg['type'] == 'text':
+                if isinstance(msg, dict) and msg['type'] != 'at':
                     hasAtMe = True
                     message += msg['data']['text'] + " "
                     break
