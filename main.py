@@ -25,6 +25,7 @@ def task(id: int):
     messages = GetAndPost.getMessage(id)
     hasAtMe = False
     message = " "
+    print(messages)
     for info in messages:
         if isinstance(info, dict) and info['type'] == 'at' \
             and info['data']['qq'] == myQQ:
