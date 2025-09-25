@@ -27,7 +27,7 @@ def task(id: int):
     message = " "
     print(messages)
     for info in messages:
-        if isinstance(info, dict) and info.get('type') == 'at' \
+        if isinstance(info, dict) and info['type'] == 'at' \
             and info['data']['qq'] == myQQ:
             for msg in messages:
                 if isinstance(msg, dict) and msg.get('type') == 'text':
