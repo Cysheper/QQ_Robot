@@ -31,7 +31,7 @@ def getMessage(group_id: int):
     except Exception as e:
         logging.error(f"GetMessage Error: {str(e)}")
         return "GetMessage Error"
-
+    print(data)
     message = []
     if len(data["messages"]) >= 1:
         message = data["messages"][0]["message"]
