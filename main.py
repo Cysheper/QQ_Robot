@@ -45,12 +45,13 @@ def task(id: int):
             print("Post Error")
 
 if __name__ == '__main__':
-    idx = 0
+    idx = 1
     while True:
         idx %= len(group_ids)
         group_id = group_ids[idx]
         task(group_id)
         time.sleep(1)
         idx += 1
+        break
 
         
