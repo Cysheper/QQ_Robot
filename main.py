@@ -1,66 +1,99 @@
 from AIChat import AIChat
 from GetAndPost import GetAndPost
-from typing import List, Dict, Any
+from GetGroupsId import GetGroupsId
+from ChangeMod import ChangeMod
+from ContorlImages import ContorlImages
 import json
 import time
 import logging
 
 # 加载配置文件
-with open("config.json", "r") as f:
+with open("config.json", "r", encoding="UTF-8") as f:
     config = json.load(f)
 
-group_ids = config["group_ids"]
-group_id = group_ids[0]
 myQQ = config["myQQ"]
 
 logging.basicConfig(
     filename='app.log',         # 日志文件名
     level=logging.INFO,         # 日志级别
-    format='%%(asctime)s %(levelname)s - %(message)s',  # 日志格式
+    format='%(asctime)s %(levelname)s - %(message)s',  # 日志格式
     datefmt='%Y-%m-%d %H:%M:%S', 
     encoding='utf-8'            # 防止中文乱码
 )
 
+def configMessage(messages):
+    hasAtMe, message = False, " "
+    replyID = ""
+    for msg in messages:
+        if msg['type'] == 'at' and msg['data']['qq'] == myQQ:
+            hasAtMe = True
+        elif msg['type'] == 'text':
+            message += msg['data']['text'] + " "
+        elif msg['type'] == 'reply':
+            replyID = msg['data']['id']
+    message = message.strip()
+    return hasAtMe, message, replyID
+
+def routers(message, sender, replyID):
+    isImage = False
+    if replyID != "":
+        msg, img = GetAndPost.getReply(replyID)
+        message += " " + msg
+    if message[:2] == "切换":
+        answer = ChangeMod.changeMod(message)
+    elif message[:2] == "添加" and img != None:
+        if ContorlImages.saveImg(img, message[2:].strip()):
+            answer = "[Accepted]"
+        else: answer = "[Error] 添加失败"
+    elif message[:2] == "来只":
+        answer = ContorlImages.getImg(message[2:].strip())
+        if answer != "未找到相关图片" and answer != "获取图片错误":
+            isImage = True
+    elif message == "help":
+        pass
+    else: answer = AIChat.ask(message, sender)
+    return answer, isImage
+
 def task(id: int):
     messages = GetAndPost.getMessage(id)
-    hasAtMe = False
-    message = " "
-    # print(messages)
-    for info in messages:
-        if isinstance(info, dict) and info['type'] == 'at' \
-            and info['data']['qq'] == myQQ:
-            for msg in messages:
-                if isinstance(msg, dict) and msg['type'] == 'text':
-                    hasAtMe = True
-                    message += msg['data']['text'] + " "
-                    break
-            break
+
+    if messages == "GetMessage Error":
+        logging.error(f"GetMessage Error")
+        print("[GetMessage Error]")
+        return 
+    
+    if messages == []:
+        return 
+
+    sender = messages[0]["sender"]["nickname"]
+    messages = messages[0]["message"]
+
+    hasAtMe, message, replyID = configMessage(messages)
     message = message.strip()
-    if not hasAtMe:
-        pass
-    else:
-        if message == "切换默认":
-            answer = AIChat.modifyMod("DefaultMod")
-        elif message == "切换猫娘":
-            answer = AIChat.modifyMod("CatGirlMode")
-        elif message == "切换算法大佬" or message == "切换算竞大佬" or message == "切换算法学长":
-            answer = AIChat.modifyMod("CS-Master-Mode")
-        elif message == "切换猫娘加强版":
-            answer = AIChat.modifyMod("CatGirlMode-Strong")
-        elif message[:2] == "切换":
-            answer = "Error: 不存在的模式"
-        else: answer = AIChat.ask(message)
-        if not GetAndPost.postMessage(id, answer):
-            logging.error(f"Post Error : {message}")
-            print("Post Error")
+    if hasAtMe:
+        answer, isImage = routers(message, sender, replyID)
+        if not isImage:
+            if not GetAndPost.postMessage(id, answer):
+                logging.error(f"PostMessage Error : {message}")
+                print("[PostMessage Error]")
+        else:
+            if not GetAndPost.postImg(id, answer):
+                logging.error(f"PostImage Error : {message}")
+                print("[PostImage Error]")
+
 
 if __name__ == '__main__':
-    idx = 1
+    idx, cnt = 0, 0
+    group_ids = []
     while True:
+        if cnt % 240 == 0:
+            group_ids = GetGroupsId.getGroupsId()
+            cnt %= 240
         idx %= len(group_ids)
         group_id = group_ids[idx]
         task(group_id)
-        time.sleep(1)
+        time.sleep(0.5)
         idx += 1
+        cnt += 1
 
         
