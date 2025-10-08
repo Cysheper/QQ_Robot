@@ -30,3 +30,12 @@ def getGroupsId() -> list:
     for item in data:
         groups.append(item["group_id"])
     return groups
+
+def getQQId():
+    try:
+        respond = requests.post(f"{url}/get_login_info", params={}).json()
+        data = respond["data"]
+    except Exception as e:
+        logging.error("获取用户QQ错误")
+
+    return data["user_id"]

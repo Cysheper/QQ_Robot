@@ -76,7 +76,7 @@ def getReply(group_id: int):
     return message, img
 
 
-def postImg(group_id: int, img: str) -> bool:
+def postImg(group_id: int, img: str) -> str:
     payload = {
         "group_id": group_id,
         "message": [
@@ -95,7 +95,7 @@ def postImg(group_id: int, img: str) -> bool:
         logging.error(f"Network Error: {str(e)}")
  
     if info["status"] == "ok":
-        return True
+        return "[Accepted]"
     else:
         logging.error("PostImg Error")
-        return False
+        return "[Error] PostImage Error"

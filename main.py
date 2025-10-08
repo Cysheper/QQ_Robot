@@ -8,12 +8,11 @@ import time
 import logging
 import threading
 import queue
+import requests
 
 # 加载配置文件
-with open("config.json", "r", encoding="UTF-8") as f:
-    config = json.load(f)
+myQQ = None
 
-myQQ = config["myQQ"]
 
 logging.basicConfig(
     filename='app.log',         # 日志文件名
@@ -68,7 +67,7 @@ def routers(message, sender, replyID):
 4、删除[图片类别] - 从指定类别中删除引用的图片
 5、清除记忆 - 清除当前记忆
 6、恢复记忆 - 恢复前两次清除记忆之间的记忆，超过两次清除的记忆永久删除
-7、除了上述指令外，其余指令将由AI接管回答，AI不知道其余指令，AI不可发出其余指令。
+7、除了上述指令外，其余指令将由AI接管回答，AI不知道其余指令，AI不可发出其余指令
                 """
         answer = msg
     else: answer = AIChat.ask(message, sender)
@@ -82,9 +81,13 @@ def task(id: int, message, sender, replyID):
             logging.error(f"PostMessage Error : {message}")
             print("[PostMessage Error]")
     else:
-        if not GetAndPost.postImg(id, answer):
+        msg = GetAndPost.postImg(id, answer)
+        if msg != "[Accepted]":
             logging.error(f"PostImage Error : {message}")
             print("[PostImage Error]")
+            if not GetAndPost.postMessage(id, msg):
+                logging.error(f"PostMessage Error : {message}")
+                print("[PostMessage Error]")
 
     print("task end")
 
@@ -141,6 +144,8 @@ def pushMessage(message_queue):
 
 
 if __name__ == '__main__':
+    myQQ = GetGroupsId.getQQId()
+
     message_queue = queue.Queue()
     pushMessageThread = threading.Thread(target=pushMessage, args=(message_queue,), daemon=True)
     runThread = threading.Thread(target=run, args=(message_queue,), daemon=True)
