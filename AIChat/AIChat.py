@@ -25,7 +25,7 @@ MOD: dict = {
     "name": "bocchi",
     "content": ""
 }
-with open(f"CharactorsMod/{MOD["name"]}.txt", "r", encoding="UTF-8") as f:
+with open(f"CharactorsMod/{MOD['name']}.txt", "r", encoding="UTF-8") as f:
     MOD["content"] = f.read()
     MOD["name"] = "bocchi"
     
