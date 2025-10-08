@@ -42,7 +42,7 @@ def routers(message, sender, replyID):
         msg, img = GetAndPost.getReply(replyID)
         message += " " + msg
     if message[:2] == "切换":
-        answer = ChangeMod.changeMod(message)
+        answer = ChangeMod.changeMod(message[2:].strip())
     elif message[:2] == "添加" and img != None:
         answer = ContorlImages.saveImg(img, message[2:].strip())
     elif message[:2] == "来只":
