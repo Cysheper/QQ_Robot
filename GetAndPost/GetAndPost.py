@@ -1,6 +1,7 @@
 import requests
 import json
 import logging
+import base64
 
 with open("config.json", "r", encoding="UTF-8") as f:
     config = json.load(f)
@@ -32,6 +33,7 @@ def getMessage(group_id: int, count=1):
 
     for msg in data:
         messages.append({
+            "message_id": msg["message_id"],
             "sender": {
                 "nickname": msg["sender"]["nickname"]
             },
@@ -82,15 +84,13 @@ def postImg(group_id: int, img: str) -> bool:
                 "type": "image",
                 "data": {
                     "summary": "[图片]",
-                    "url": img
+                    "file": img
                 }
             }
         ]
     }
     try:
-        print(payload)
         info = requests.post(f"{url}/send_group_msg", json=payload).json()
-        print(info)
     except Exception as e:
         logging.error(f"Network Error: {str(e)}")
  

@@ -22,12 +22,12 @@ apiKey = config["AI_API_KEY"]
 client = OpenAI(api_key=apiKey, base_url=baseURL)
 
 MOD: dict = {
-    "name": "DefaultMod",
+    "name": "Bocchi",
     "content": ""
 }
-with open("CharactorsMod/Default.txt", "r", encoding="UTF-8") as f:
+with open(f"CharactorsMod/{MOD["name"]}.txt", "r", encoding="UTF-8") as f:
     MOD["content"] = f.read()
-    MOD["name"] = "DefaultMod"
+    MOD["name"] = "Bocchi"
     
 USER = config["adminUser"]
 
@@ -107,7 +107,7 @@ def ask(problem: str, user: str) -> str:
         else:
             return "[Error] 暂无记忆可恢复"
     try:
-        memory.append({"role": "user", "content": f"[{user}]: " + problem})
+        memory.append({"role": "user", "content": f"UserName: {user}, Content: {problem}"})
         response = client.chat.completions.create(
             model="deepseek-chat",
             messages=memory
