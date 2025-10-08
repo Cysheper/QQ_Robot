@@ -20,11 +20,11 @@ def getGroupsId() -> list:
         "no_cache": False
     }
     try:
-        respond = requests.get(f"{url}/get_group_list", params=payload).json()
+        respond = requests.post(f"{url}/get_group_list", params=payload).json()
         data = respond["data"]
     except Exception as e:
         logging.error(f"获取群列表错误：{str(e)}")
-    
+
     groups = []
 
     for item in data:
@@ -33,9 +33,11 @@ def getGroupsId() -> list:
 
 def getQQId():
     try:
-        respond = requests.post(f"{url}/get_login_info", params={}).json()
-        data = respond["data"]
+        respond = requests.post(f"{url}/get_login_info", data={}).json()
+        
     except Exception as e:
         logging.error("获取用户QQ错误")
 
-    return data["user_id"]
+    if respond["status"] == "ok":
+        return respond["data"]["user_id"]
+    return "获取QQ号错误"

@@ -11,8 +11,6 @@ import queue
 import requests
 
 # 加载配置文件
-myQQ = None
-
 
 logging.basicConfig(
     filename='app.log',         # 日志文件名
@@ -22,7 +20,7 @@ logging.basicConfig(
     encoding='utf-8'            # 防止中文乱码
 )
 
-def configMessage(messages):
+def configMessage(messages, myQQ):
     hasAtMe, message = False, " "
     replyID = ""
     for msg in messages:
@@ -91,7 +89,7 @@ def task(id: int, message, sender, replyID):
 
     print("task end")
 
-def checkInfo(messages):
+def checkInfo(messages, myQQ):
     if messages == "GetMessage Error":
         logging.error(f"GetMessage Error")
         print("[GetMessage Error]")
@@ -103,7 +101,7 @@ def checkInfo(messages):
     sender = messages[0]["sender"]["nickname"]
     message_id = messages[0]["message_id"]
     messages = messages[0]["message"]
-    hasAtMe, message, replyID = configMessage(messages)
+    hasAtMe, message, replyID = configMessage(messages, myQQ)
     
     if hasAtMe:
         message = message.strip()
@@ -119,7 +117,7 @@ def run(message_queue):
         taskThread = threading.Thread(target=task, args=(group_id, message, sender, replyID), daemon=True)
         taskThread.start()
 
-def pushMessage(message_queue):
+def pushMessage(message_queue, myQQ):
     idx = 0
     group_ids = GetGroupsId.getGroupsId()
     lastMessage = None
@@ -127,7 +125,7 @@ def pushMessage(message_queue):
         idx %= len(group_ids)
         group_id = group_ids[idx]
         messages = GetAndPost.getMessage(group_id)
-        message, sender, replyID, message_id = checkInfo(messages)
+        message, sender, replyID, message_id = checkInfo(messages, myQQ)
         # print(f"group_id={group_id},message={message},sender={sender},replyID={replyID}")
 
         if message == None or sender == None or replyID == None: 
@@ -144,10 +142,11 @@ def pushMessage(message_queue):
 
 
 if __name__ == '__main__':
-    myQQ = GetGroupsId.getQQId()
+    myQQ = str(GetGroupsId.getQQId())
+    logging.info(myQQ)
 
     message_queue = queue.Queue()
-    pushMessageThread = threading.Thread(target=pushMessage, args=(message_queue,), daemon=True)
+    pushMessageThread = threading.Thread(target=pushMessage, args=(message_queue,myQQ), daemon=True)
     runThread = threading.Thread(target=run, args=(message_queue,), daemon=True)
     pushMessageThread.start()
     runThread.start()

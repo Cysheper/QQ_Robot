@@ -40,7 +40,6 @@ def saveImg(img: str, title: str) -> str:
         # GitHub仓库 
         repo = my_repo
         filename = f"{title}_{timestamp}"
-        path = f"QQBotUpload/{filename}"
 
         # 图片格式
         content_type = response.headers.get("Content-Type", "")
@@ -51,19 +50,26 @@ def saveImg(img: str, title: str) -> str:
         # 某些服务器可能返回 image/jpg，要统一成 jpeg
         if ext == "jpg":
             ext = "jpeg"
+
+        path = f"QQBotUpload/{filename}.{ext}"
         # api
-        api = f"https://api.github.com/repos/{repo}/contents/{path}.{ext}"
+        api = f"https://gitee.com/api/v5/repos/{repo}/contents/{path}"
 
-        data = {"message": f"upload {filename}", "content": b64}
+        data = {
+            "access_token": my_token,
+            "message": f"upload {filename}", 
+            "content": b64,
+            "branch": "master"
+        }
 
-        r = requests.put(api, headers={"Authorization": f"token {my_token}"}, json=data)
+        r = requests.post(api, json=data)
         if r.status_code != 201:
             raise Exception(f"{r.status_code} 上传异常")
-        imageUrl = f"https://cdn.jsdelivr.net/gh/{my_repo}@main/QQBotUpload/{filename}.{ext}"
+        imageUrl = f"https://gitee.com/{repo}/raw/master/{path}"
 
     except Exception as e:
-        logging.error(f"[Error] 图片上传GitHub错误 {str(e)}")
-        return "[Error] 上传图片至GitHub错误"
+        logging.error(f"[Error] 图片上传Gitee错误 {str(e)}")
+        return "[Error] 上传图片至Gitee错误"
 
     try:
         print(title)
@@ -83,7 +89,8 @@ def saveImg(img: str, title: str) -> str:
         logging.error("保存图片错误")
         return "[Error] 保存图片错误"
     
-    return "[Accepted]"
+    logging.info(f"[Accepted] 添加{title}成功")
+    return f"[Accepted] 添加{title}成功"
 
 
 def getImg(title: str) -> str:

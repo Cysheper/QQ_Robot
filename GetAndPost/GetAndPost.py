@@ -84,7 +84,7 @@ def postImg(group_id: int, img: str) -> str:
                 "type": "image",
                 "data": {
                     "summary": "[图片]",
-                    "file": img
+                    "url": img
                 }
             }
         ]
@@ -93,9 +93,9 @@ def postImg(group_id: int, img: str) -> str:
         info = requests.post(f"{url}/send_group_msg", json=payload).json()
     except Exception as e:
         logging.error(f"Network Error: {str(e)}")
- 
+        return "Network Error"
     if info["status"] == "ok":
         return "[Accepted]"
     else:
         logging.error("PostImg Error")
-        return "[Error] PostImage Error"
+        return "[Error] Post Image Error"

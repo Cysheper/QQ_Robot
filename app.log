@@ -1,11 +1,9 @@
-2025-10-08 17:20:46 INFO - 记忆已清除
-2025-10-08 17:20:46 INFO - 已切换模式: CatGirl
-2025-10-08 17:20:54 INFO - HTTP Request: POST https://api.deepseek.com/chat/completions "HTTP/1.1 200 OK"
-2025-10-08 17:21:14 INFO - 记忆已清除
-2025-10-08 17:21:14 INFO - 已切换模式: bocchi
-2025-10-08 17:21:21 INFO - HTTP Request: POST https://api.deepseek.com/chat/completions "HTTP/1.1 200 OK"
-2025-10-08 17:21:43 INFO - 记忆已清除
-2025-10-08 17:21:43 INFO - 已切换模式: sun
-2025-10-08 17:21:49 INFO - HTTP Request: POST https://api.deepseek.com/chat/completions "HTTP/1.1 200 OK"
-2025-10-08 17:22:04 INFO - 记忆已清除
-2025-10-08 18:09:03 INFO - HTTP Request: POST https://api.deepseek.com/chat/completions "HTTP/1.1 200 OK"
+2025-10-08 19:39:42 INFO - HTTP Request: POST https://api.deepseek.com/chat/completions "HTTP/1.1 200 OK"
+2025-10-08 20:21:03 INFO - HTTP Request: POST https://api.deepseek.com/chat/completions "HTTP/1.1 200 OK"
+2025-10-08 20:21:23 INFO - [Accepted] 添加优化成功
+2025-10-08 20:21:44 ERROR - PostImg Error
+2025-10-08 20:21:44 ERROR - PostImage Error : 来只优化
+2025-10-08 20:42:59 ERROR - [Error] 图片上传Gitee错误 401 上传异常
+2025-10-08 20:44:07 ERROR - [Error] 图片上传Gitee错误 404 上传异常
+2025-10-08 20:44:53 ERROR - [Error] 图片上传Gitee错误 400 上传异常
+2025-10-08 20:47:37 INFO - [Accepted] 添加何意味成功
