@@ -22,12 +22,12 @@ apiKey = config["AI_API_KEY"]
 client = OpenAI(api_key=apiKey, base_url=baseURL)
 
 MOD: dict = {
-    "name": "Bocchi",
+    "name": "bocchi",
     "content": ""
 }
 with open(f"CharactorsMod/{MOD["name"]}.txt", "r", encoding="UTF-8") as f:
     MOD["content"] = f.read()
-    MOD["name"] = "Bocchi"
+    MOD["name"] = "bocchi"
     
 USER = config["adminUser"]
 
