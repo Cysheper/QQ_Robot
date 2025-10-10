@@ -34,6 +34,7 @@ def saveImg(img: str, title: str) -> str:
     except Exception as e:
         logging.error("[Error] 下载图片错误")
         return "[Error] 下载图片错误"
+    
     try:
         # 获取时间戳
         timestamp = time.strftime("%Y%m%d_%H%M%S")  # 例如 20251007_235959
@@ -78,7 +79,7 @@ def saveImg(img: str, title: str) -> str:
             data = json.load(f)
 
         if title not in data:
-            data[title] = { }
+            data[title] = { } 
 
         data[title][imageUrl] = img_hash
 

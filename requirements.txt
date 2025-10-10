@@ -1,2 +1,18 @@
-google-generativeai>=0.3.0
-python-dotenv>=1.0.0
+# AI相关
+openai>=2.3.0
+
+# 网络请求
+requests>=2.32.5
+
+# HTML解析
+beautifulsoup4>=4.14.2
+lxml>=6.0.2
+
+# 图像处理
+html2image>=2.0.7
+
+# 文档处理
+markdown>=3.9
+
+# 网页自动化
+playwright>=1.55.0

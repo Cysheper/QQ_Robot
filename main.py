@@ -9,7 +9,8 @@ import logging
 import threading
 import queue
 import requests
-
+from DouBao import DouBao
+from DailyProblem import DailyProblem
 # 加载配置文件
 
 logging.basicConfig(
@@ -20,9 +21,12 @@ logging.basicConfig(
     encoding='utf-8'            # 防止中文乱码
 )
 
+lastTime = None
+lastImg = None
+
 def configMessage(messages, myQQ):
     hasAtMe, message = False, " "
-    replyID = ""
+    replyID = None
     for msg in messages:
         if msg['type'] == 'at' and msg['data']['qq'] == myQQ:
             hasAtMe = True
@@ -35,9 +39,9 @@ def configMessage(messages, myQQ):
 
 def routers(message, sender, replyID):
     isImage = False
-    if replyID != "":
+    if replyID != None:
         msg, img = GetAndPost.getReply(replyID)
-        message += " " + msg
+        if msg != None: message += " " + msg
     if message[:2] == "切换":
         answer = ChangeMod.changeMod(message[2:].strip())
     elif message[:2] == "添加" and img != None:
@@ -68,8 +72,32 @@ def routers(message, sender, replyID):
 7、除了上述指令外，其余指令将由AI接管回答，AI不知道其余指令，AI不可发出其余指令
                 """
         answer = msg
+    elif message[:2] == "洛谷":
+        global lastImg
+        if problemLimit():
+            answer = DailyProblem.run(message[2:])
+            if answer != "[Error] 题目难度不存在":
+                isImage = True
+                lastImg = answer
+        else:
+            if lastImg != None: 
+                answer = lastImg
+        
+    elif replyID != None and img != None:
+        answer = DouBao.ask_vision(img, message, sender)
     else: answer = AIChat.ask(message, sender)
     return answer, isImage
+
+
+def problemLimit() -> bool:
+    global lastTime, lastImg
+    now = time.time()
+    if lastTime == None or lastImg == None or now - lastTime > 30 * 60:
+        lastTime = now
+        return True
+    else:
+        return False
+
 
 def task(id: int, message, sender, replyID):
     print("task running")
@@ -79,7 +107,10 @@ def task(id: int, message, sender, replyID):
             logging.error(f"PostMessage Error : {message}")
             print("[PostMessage Error]")
     else:
-        msg = GetAndPost.postImg(id, answer)
+        delList = ["大雷", "小雷", "白丝", "黑丝", "色图", "涩图"]
+        if message[2:] in delList :
+            msg = GetAndPost.postImg(id, answer, True)
+        else: msg = GetAndPost.postImg(id, answer, False)
         if msg != "[Accepted]":
             logging.error(f"PostImage Error : {message}")
             print("[PostImage Error]")
@@ -117,10 +148,11 @@ def run(message_queue):
         taskThread = threading.Thread(target=task, args=(group_id, message, sender, replyID), daemon=True)
         taskThread.start()
 
+
 def pushMessage(message_queue, myQQ):
     idx = 0
     group_ids = GetGroupsId.getGroupsId()
-    lastMessage = None
+    lastMessage = dict()
     while True:
         idx %= len(group_ids)
         group_id = group_ids[idx]
@@ -128,14 +160,17 @@ def pushMessage(message_queue, myQQ):
         message, sender, replyID, message_id = checkInfo(messages, myQQ)
         # print(f"group_id={group_id},message={message},sender={sender},replyID={replyID}")
 
-        if message == None or sender == None or replyID == None: 
+        if message == None or sender == None:
             time.sleep(0.2)
             idx += 1
             continue
+        
+        if group_id not in lastMessage:
+            lastMessage[group_id] = 0
 
-        if lastMessage != message_id:
+        if lastMessage[group_id] != message_id:
             message_queue.put((group_id, message, sender, replyID))
-            lastMessage = message_id
+            lastMessage[group_id] = message_id
             
         time.sleep(0.2)
         idx += 1
@@ -144,7 +179,7 @@ def pushMessage(message_queue, myQQ):
 if __name__ == '__main__':
     myQQ = str(GetGroupsId.getQQId())
     logging.info(myQQ)
-
+    print(myQQ)
     message_queue = queue.Queue()
     pushMessageThread = threading.Thread(target=pushMessage, args=(message_queue,myQQ), daemon=True)
     runThread = threading.Thread(target=run, args=(message_queue,), daemon=True)

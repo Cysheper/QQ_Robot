@@ -2,6 +2,8 @@ import requests
 import json
 import logging
 import base64
+import threading
+import time
 
 with open("config.json", "r", encoding="UTF-8") as f:
     config = json.load(f)
@@ -69,14 +71,15 @@ def getReply(group_id: int):
     except Exception as e:
         logging.error(f"GetMessage Error: {str(e)}")
         return "GetMessage Error", ""
-    message, img = "", ""
+    message, img = "", None
     for msg in data['message']:
         if msg['type'] == "text": message += msg['data']['text']
         if msg['type'] == 'image':  img = msg['data']['url']
+    if message == "": message = None
     return message, img
 
 
-def postImg(group_id: int, img: str) -> str:
+def postImg(group_id: int, img: str, willdel: bool = False) -> str:
     payload = {
         "group_id": group_id,
         "message": [
@@ -84,7 +87,7 @@ def postImg(group_id: int, img: str) -> str:
                 "type": "image",
                 "data": {
                     "summary": "[图片]",
-                    "url": img
+                    "file": img
                 }
             }
         ]
@@ -95,7 +98,30 @@ def postImg(group_id: int, img: str) -> str:
         logging.error(f"Network Error: {str(e)}")
         return "Network Error"
     if info["status"] == "ok":
+        if willdel:
+            message_id = info["data"]["message_id"]
+            delImage = threading.Thread(target=delMessage, args=(message_id,))
+            delImage.start()
         return "[Accepted]"
     else:
         logging.error("PostImg Error")
         return "[Error] Post Image Error"
+
+
+def delMessage(message_id):
+    time.sleep(60)
+    try:
+        data = {
+            "message_id": message_id
+        }
+        response = requests.post(f"{url}/delete_msg", data=data).json()
+        if response["status"] == "ok":
+            logging.info(f"图片撤回成功")
+            print("[Accepted] 图片撤回成功")
+        else:
+            logging.error(f"图片撤回失败")
+            print("[Error] 图片撤回失败")
+
+    except Exception as e:
+        logging.error(f"图片撤回失败：{str(e)}")
+        print("[Error] NetWork Error")

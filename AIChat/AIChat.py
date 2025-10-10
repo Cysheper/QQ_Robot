@@ -17,7 +17,7 @@ with open("config.json", "r", encoding="UTF-8") as f:
     config = json.load(f)
 
 baseURL = config["AI_BASE_URL"]
-apiKey = config["AI_API_KEY"]
+apiKey = config["DOUBAO_AI_API_KEY"]
 
 client = OpenAI(api_key=apiKey, base_url=baseURL)
 
@@ -82,7 +82,7 @@ def zipMemory():
     global memory
     memory.append({"role": "system", "content": config["SummeryCmd"]})
     response = client.chat.completions.create(
-        model="deepseek-chat",
+        model="doubao-seed-1-6-flash-250828",
         messages=memory
     ) 
     answer = response.choices[0].message.content or ""
@@ -109,7 +109,7 @@ def ask(problem: str, user: str) -> str:
     try:
         memory.append({"role": "user", "content": f"UserName: {user}, Content: {problem}"})
         response = client.chat.completions.create(
-            model="deepseek-chat",
+            model="doubao-seed-1-6-flash-250828",
             messages=memory
         ) 
         answer = response.choices[0].message.content or ""
@@ -120,4 +120,4 @@ def ask(problem: str, user: str) -> str:
     except Exception as e:
         print(f"发生错误: {str(e)}")
         logging.error(f"Error: AI 发生错误: {str(e)}")
-        return f"抱歉，出现了一个错误: {str(e)}"
+        return f"[Error] DeepSeek API 异常"
