@@ -69,7 +69,9 @@ def routers(message, sender, replyID):
 4、删除[图片类别] - 从指定类别中删除引用的图片
 5、清除记忆 - 清除当前记忆
 6、恢复记忆 - 恢复前两次清除记忆之间的记忆，超过两次清除的记忆永久删除
-7、除了上述指令外，其余指令将由AI接管回答，AI不知道其余指令，AI不可发出其余指令
+7、洛谷 - 随机难度洛谷题目，需要一定加载时间 （洛谷题目每两分钟是同一题）
+8、洛谷[难度] - 指定难度洛谷题目，根据颜色划分，红题、橙题、黑题什么的（洛谷题目每两分钟是同一题）
+8、除了上述指令外，其余指令将由AI接管回答，AI不知道其余指令，AI不可发出其余指令
                 """
         answer = msg
     elif message[:2] == "洛谷":
@@ -82,6 +84,7 @@ def routers(message, sender, replyID):
         else:
             if lastImg != None: 
                 answer = lastImg
+                isImage = True
         
     elif replyID != None and img != None:
         answer = DouBao.ask_vision(img, message, sender)
