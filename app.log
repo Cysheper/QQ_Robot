@@ -1,32 +1,92 @@
-2025-10-09 17:27:22 INFO - 3951373455
-2025-10-09 17:35:51 INFO - 3951373455
-2025-10-09 17:35:54 INFO - 记忆已清除
-2025-10-09 17:35:54 INFO - 已切换模式: sun
-2025-10-09 17:36:06 INFO - HTTP Request: POST https://ark.cn-beijing.volces.com/api/v3/chat/completions "HTTP/1.1 200 OK"
-2025-10-09 17:37:40 INFO - 3951373455
-2025-10-09 17:37:48 INFO - 记忆已清除
-2025-10-09 17:37:48 INFO - 已切换模式: sun
-2025-10-09 17:37:59 INFO - HTTP Request: POST https://api.deepseek.com/chat/completions "HTTP/1.1 200 OK"
-2025-10-09 17:38:26 INFO - HTTP Request: POST https://api.deepseek.com/chat/completions "HTTP/1.1 200 OK"
-2025-10-09 17:39:22 INFO - HTTP Request: POST https://api.deepseek.com/chat/completions "HTTP/1.1 200 OK"
-2025-10-09 17:47:00 INFO - 3951373455
-2025-10-09 18:52:13 INFO - 3951373455
-2025-10-10 01:40:47 INFO - 3951373455
-2025-10-10 01:41:02 INFO - 3951373455
-2025-10-10 01:42:23 INFO - 3951373455
-2025-10-10 01:42:32 ERROR - PostImg Error
-2025-10-10 01:42:32 ERROR - PostImage Error : 来道洛谷
-2025-10-10 01:45:10 ERROR - PostImg Error
-2025-10-10 01:45:10 ERROR - PostImage Error : 来道洛谷
-2025-10-10 01:45:51 ERROR - PostImg Error
-2025-10-10 01:45:51 ERROR - PostImage Error : 来道红题
-2025-10-10 01:46:39 INFO - 3951373455
-2025-10-10 01:46:55 INFO - HTTP Request: POST https://ark.cn-beijing.volces.com/api/v3/chat/completions "HTTP/1.1 200 OK"
-2025-10-10 01:48:20 INFO - 图片撤回成功
-2025-10-10 01:48:52 INFO - 图片撤回成功
-2025-10-10 01:49:28 INFO - 3951373455
-2025-10-10 01:50:24 INFO - HTTP Request: POST https://ark.cn-beijing.volces.com/api/v3/chat/completions "HTTP/1.1 200 OK"
-2025-10-10 01:51:19 INFO - 图片撤回成功
-2025-10-10 01:52:24 INFO - 图片撤回成功
-2025-10-10 01:56:11 INFO - 3951373455
-2025-10-10 02:01:02 INFO - 3951373455
+2025-10-13 01:27:03 INFO - 3951373455
+2025-10-13 01:28:47 INFO - 3951373455
+2025-10-13 01:29:26 INFO - 3951373455
+2025-10-13 01:31:27 INFO - 3951373455
+2025-10-13 01:31:32 ERROR - PostImg Error
+2025-10-13 01:31:32 ERROR - PostImage Error : 禁漫
+2025-10-13 01:33:18 INFO - 3951373455
+2025-10-13 01:33:40 ERROR - PostImg Error
+2025-10-13 01:33:40 ERROR - PostImage Error : 禁漫
+2025-10-13 01:33:47 ERROR - PostImg Error
+2025-10-13 01:33:47 ERROR - PostImage Error : 禁漫
+2025-10-13 01:33:52 ERROR - PostImg Error
+2025-10-13 01:33:52 ERROR - PostImage Error : 禁漫
+2025-10-13 01:33:58 ERROR - PostImg Error
+2025-10-13 01:33:58 ERROR - PostImage Error : 禁漫
+2025-10-13 01:34:29 INFO - 3951373455
+2025-10-13 01:50:34 ERROR - PostImg Error
+2025-10-13 01:50:34 ERROR - PostImage Error : 来只soyo
+2025-10-13 01:51:11 ERROR - PostImg Error
+2025-10-13 01:51:11 ERROR - PostImage Error : 来只soyo
+2025-10-13 01:52:48 INFO - 3951373455
+2025-10-13 01:52:51 ERROR - PostImg Error
+2025-10-13 01:52:51 ERROR - PostImage Error : 来只soyo
+2025-10-13 01:53:12 INFO - 3951373455
+2025-10-13 13:20:19 INFO - 3951373455
+2025-10-13 13:20:36 INFO - [Accepted] 添加小雷成功
+2025-10-13 13:20:40 INFO - [Accepted] 添加小雷成功
+2025-10-13 13:20:44 INFO - [Accepted] 添加小雷成功
+2025-10-13 13:20:44 ERROR - PostImg Error
+2025-10-13 13:20:44 ERROR - PostImage Error : 添加小雷
+2025-10-13 13:21:45 INFO - 3951373455
+2025-10-13 13:21:56 INFO - [Accepted] 添加小雷成功
+2025-10-13 13:22:01 INFO - [Accepted] 添加小雷成功
+2025-10-13 13:22:05 INFO - [Accepted] 添加小雷成功
+2025-10-13 13:22:05 ERROR - PostImg Error
+2025-10-13 13:22:05 ERROR - PostImage Error : 添加小雷
+2025-10-13 13:26:25 INFO - 3951373455
+2025-10-13 13:27:19 INFO - [Accepted] 添加小雷成功
+2025-10-13 13:29:32 INFO - 3951373455
+2025-10-13 13:29:40 INFO - [Accepted] 添加小雷成功
+2025-10-13 13:29:44 INFO - [Accepted] 添加小雷成功
+2025-10-13 13:29:47 INFO - [Accepted] 添加小雷成功
+2025-10-13 13:29:47 INFO - [Aceepted] 批量添加小雷图片成功(3张)
+2025-10-13 13:31:07 INFO - 图片撤回成功
+2025-10-13 13:31:29 INFO - 图片撤回成功
+2025-10-13 13:32:08 INFO - 3951373455
+2025-10-13 13:43:18 INFO - HTTP Request: POST https://ark.cn-beijing.volces.com/api/v3/chat/completions "HTTP/1.1 200 OK"
+2025-10-13 13:43:25 ERROR - PostImg Error
+2025-10-13 13:43:25 ERROR - PostImage Error : 禁漫
+2025-10-13 13:44:06 ERROR - PostImg Error
+2025-10-13 13:44:06 ERROR - PostImage Error : 禁漫
+2025-10-13 13:44:13 ERROR - PostImg Error
+2025-10-13 13:44:13 ERROR - PostImage Error : 禁漫
+2025-10-13 13:45:03 ERROR - PostImg Error
+2025-10-13 13:45:03 ERROR - PostImage Error : 禁漫206725
+2025-10-13 13:45:08 ERROR - PostImg Error
+2025-10-13 13:45:08 ERROR - PostImage Error : 禁漫
+2025-10-13 13:46:45 ERROR - PostImg Error
+2025-10-13 13:46:45 ERROR - PostImage Error : 禁漫206143
+2025-10-13 13:47:40 ERROR - PostImg Error
+2025-10-13 13:47:40 ERROR - PostImage Error : 禁漫
+2025-10-13 13:48:30 ERROR - PostImg Error
+2025-10-13 13:48:30 ERROR - PostImage Error : 禁漫
+2025-10-13 13:48:36 ERROR - PostImg Error
+2025-10-13 13:48:36 ERROR - PostImage Error : 禁漫
+2025-10-13 13:48:44 ERROR - PostImg Error
+2025-10-13 13:48:44 ERROR - PostImage Error : 禁漫
+2025-10-13 13:48:49 ERROR - PostImg Error
+2025-10-13 13:48:49 ERROR - PostImage Error : 禁漫
+2025-10-13 13:48:55 ERROR - PostImg Error
+2025-10-13 13:48:55 ERROR - PostImage Error : 禁漫
+2025-10-13 13:49:05 ERROR - PostImg Error
+2025-10-13 13:49:05 ERROR - PostImage Error : 禁漫
+2025-10-13 13:50:18 ERROR - PostImg Error
+2025-10-13 13:50:18 ERROR - PostImage Error : 禁漫1219043
+2025-10-13 13:51:47 ERROR - PostImg Error
+2025-10-13 13:51:47 ERROR - PostImage Error : 禁漫1219043
+2025-10-13 13:52:04 ERROR - PostImg Error
+2025-10-13 13:52:04 ERROR - PostImage Error : 禁漫496986
+2025-10-13 13:53:18 ERROR - PostImg Error
+2025-10-13 13:53:18 ERROR - PostImage Error : 禁漫555488
+2025-10-13 13:53:58 ERROR - PostImg Error
+2025-10-13 13:53:58 ERROR - PostImage Error : 禁漫272278
+2025-10-13 13:57:23 INFO - HTTP Request: POST https://ark.cn-beijing.volces.com/api/v3/chat/completions "HTTP/1.1 200 OK"
+2025-10-13 13:58:24 ERROR - PostImg Error
+2025-10-13 13:58:24 ERROR - PostImage Error : 禁漫
+2025-10-13 14:04:48 INFO - 3951373455
+2025-10-13 14:05:54 INFO - 3951373455
+2025-10-13 14:13:12 INFO - 3951373455
+2025-10-13 14:13:36 INFO - 3951373455
+2025-10-13 14:14:48 INFO - 3951373455
+2025-10-13 14:18:59 INFO - 3951373455

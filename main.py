@@ -11,6 +11,8 @@ import queue
 import requests
 from DouBao import DouBao
 from DailyProblem import DailyProblem
+from Jinman import Jinman
+
 # 加载配置文件
 
 logging.basicConfig(
@@ -38,20 +40,36 @@ def configMessage(messages, myQQ):
     return hasAtMe, message, replyID
 
 def routers(message, sender, replyID):
-    isImage = False
+    image_url, respond = None, None
     if replyID != None:
-        msg, img = GetAndPost.getReply(replyID)
+        msg, img_url = GetAndPost.getReply(replyID)
         if msg != None: message += " " + msg
+
+
     if message[:2] == "切换":
-        answer = ChangeMod.changeMod(message[2:].strip())
-    elif message[:2] == "添加" and img != None:
-        answer = ContorlImages.saveImg(img, message[2:].strip())
+        respond = ChangeMod.changeMod(message[2:].strip())
+
+
+    elif message[:2] == "添加" and img_url != None:
+        if type(img_url) == str:
+            respond = ContorlImages.saveImg(img_url, message[2:].strip())
+        else:
+            respond = ContorlImages.saveImgByGroup(img_url, message[2:].strip())
+
+
     elif message[:2] == "来只":
-        answer = ContorlImages.getImg(message[2:].strip())
-        if answer != "未找到相关图片" and answer != "获取图片错误":
-            isImage = True
-    elif message[:2] == "删除" and img != None:
-        answer = ContorlImages.delImg(img, message[2:].strip())
+        image_url = ContorlImages.getImg(message[2:].strip())
+        if image_url == "未找到相关图片" or image_url == "获取图片错误":
+            respond = image_url
+            image_url = None
+            
+    elif message[:4] == "图片信息":
+        respond = ContorlImages.getImgInfo()
+
+    elif message[:2] == "删除" and img_url != None:
+        respond = ContorlImages.delImg(img_url, message[2:].strip())
+
+
     elif message == "help":
         msg = """指令指南
 所有指令只能@后才生效。
@@ -73,23 +91,36 @@ def routers(message, sender, replyID):
 8、洛谷[难度] - 指定难度洛谷题目，根据颜色划分，红题、橙题、黑题什么的（洛谷题目每两分钟是同一题）
 8、除了上述指令外，其余指令将由AI接管回答，AI不知道其余指令，AI不可发出其余指令
                 """
-        answer = msg
+        respond = msg
+
+
     elif message[:2] == "洛谷":
         global lastImg
         if problemLimit():
-            answer = DailyProblem.run(message[2:])
-            if answer != "[Error] 题目难度不存在":
-                isImage = True
-                lastImg = answer
+            image_url = DailyProblem.run(message[2:])
+            if image_url != "[Error] 题目难度不存在":
+                lastImg = image_url
         else:
             if lastImg != None: 
-                answer = lastImg
-                isImage = True
-        
-    elif replyID != None and img != None:
-        answer = DouBao.ask_vision(img, message, sender)
-    else: answer = AIChat.ask(message, sender)
-    return answer, isImage
+                image_url = lastImg
+
+
+    elif message[:2] == "禁漫" and message[2:].strip() == "":
+        image_url, respond = Jinman.getJinmanImageUrlRand()
+
+
+    elif message[:2] == "禁漫" and message[2:].strip().isdigit():
+        image_url, respond = Jinman.getJinmanImageUrlBySeed(int(message[2:].strip()))
+
+
+    elif replyID != None and image_url != None:
+        respond = DouBao.ask_vision(image_url, message, sender)
+
+
+    else: respond = AIChat.ask(message, sender)
+
+
+    return respond, image_url
 
 
 def problemLimit() -> bool:
@@ -104,22 +135,30 @@ def problemLimit() -> bool:
 
 def task(id: int, message, sender, replyID):
     print("task running")
-    answer, isImage = routers(message, sender, replyID)
-    if not isImage:
+    answer, image = routers(message, sender, replyID)
+    if answer != None and image == None:
         if not GetAndPost.postMessage(id, answer):
             logging.error(f"PostMessage Error : {message}")
             print("[PostMessage Error]")
-    else:
+    if image != None and answer == None:
         delList = ["大雷", "小雷", "白丝", "黑丝", "色图", "涩图"]
         if message[2:] in delList :
-            msg = GetAndPost.postImg(id, answer, True)
-        else: msg = GetAndPost.postImg(id, answer, False)
+            msg = GetAndPost.postImg(id, image, True)
+        else: msg = GetAndPost.postImg(id, image, False)
         if msg != "[Accepted]":
             logging.error(f"PostImage Error : {message}")
             print("[PostImage Error]")
             if not GetAndPost.postMessage(id, msg):
                 logging.error(f"PostMessage Error : {message}")
                 print("[PostMessage Error]")
+    if image != None and answer != None:
+        msg = GetAndPost.postImgAndMessage(id, image, answer)
+        if msg != "[Accepted]":
+            logging.error(f"PostImage Error : {message}")
+            print("[PostImage Error]")
+            if not GetAndPost.postMessage(id, msg):
+                logging.error(f"PostMessage Error : {message}")
+                print("[PostMessage Error]")        
 
     print("task end")
 
@@ -178,8 +217,8 @@ def pushMessage(message_queue, myQQ):
         time.sleep(0.2)
         idx += 1
 
-
-if __name__ == '__main__':
+def main() -> None:
+    global myQQ
     myQQ = str(GetGroupsId.getQQId())
     logging.info(myQQ)
     print(myQQ)
@@ -191,4 +230,8 @@ if __name__ == '__main__':
 
     while True:
         time.sleep(1)
+
+
+if __name__ == '__main__':
+    main()
         

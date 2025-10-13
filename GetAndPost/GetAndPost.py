@@ -61,7 +61,7 @@ def postMessage(group_id: int, message: str) -> bool:
         return False
     
 
-def getReply(group_id: int):
+def getReply(group_id: int) -> tuple:
     payload = {
         "message_id": group_id
     }
@@ -71,11 +71,12 @@ def getReply(group_id: int):
     except Exception as e:
         logging.error(f"GetMessage Error: {str(e)}")
         return "GetMessage Error", ""
-    message, img = "", None
+    message, img = "", []
     for msg in data['message']:
         if msg['type'] == "text": message += msg['data']['text']
-        if msg['type'] == 'image':  img = msg['data']['url']
+        if msg['type'] == 'image':  img.append(msg['data']['url'])
     if message == "": message = None
+    if len(img) == 1: img = img[0]
     return message, img
 
 
@@ -93,7 +94,7 @@ def postImg(group_id: int, img: str, willdel: bool = False) -> str:
         ]
     }
     try:
-        info = requests.post(f"{url}/send_group_msg", json=payload).json()
+        info = requests.post(f"{url}/send_group_msg", json=payload, timeout=10).json()
     except Exception as e:
         logging.error(f"Network Error: {str(e)}")
         return "Network Error"
@@ -106,6 +107,39 @@ def postImg(group_id: int, img: str, willdel: bool = False) -> str:
     else:
         logging.error("PostImg Error")
         return "[Error] Post Image Error"
+
+
+def postImgAndMessage(group_id: int, img: str, message: str):
+    payload = {
+        "group_id": group_id,
+        "message": [
+            {
+                "type": "text",
+                "data": {
+                    "text": f"{message}\n"
+                }
+            },
+            {
+                "type": "image",
+                "data": {
+                    "summary": "[图片]",
+                    "file": img
+                }
+            }
+        ]
+    }
+    try:
+        info = requests.post(f"{url}/send_group_msg", json=payload, timeout=15).json()
+    except Exception as e:
+        logging.error(f"Network Error: {str(e)}")
+        return "Network Error"
+    if info["status"] == "ok":
+
+        return "[Accepted]"
+    else:
+        logging.error("PostImg Error")
+        return "[Error] Post Image Error"    
+
 
 
 def delMessage(message_id):

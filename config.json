@@ -3,6 +3,5 @@
     "adminUser": "千尺",
     "AI_BASE_URL": "https://ark.cn-beijing.volces.com/api/v3",
     "GitHub_repo": "Cysheper/my-images",
-
     "SummeryCmd": "请将所有历史聊天记录总结为一段话，记录其中的重要内容，忽略不重要的内容，字数不限。对于重要信息，严格保留信息发出人名称和信息内容。重复内容只保留一条，过长内容大概总结。"
 }

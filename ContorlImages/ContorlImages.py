@@ -94,6 +94,21 @@ def saveImg(img: str, title: str) -> str:
     return f"[Accepted] 添加{title}成功"
 
 
+def saveImgByGroup(imgList: list, title: str):
+    try:
+        for img in imgList:
+            info = saveImg(img, title)
+            if info[:10] != "[Accepted]":
+                raise Exception(info)
+            
+        logging.info(f"[Aceepted] 批量添加{title}图片成功({len(imgList)}张)")
+        print(f"[Aceepted] 批量添加{title}图片成功({len(imgList)}张)")
+        return f"[Aceepted] 批量添加{title}图片成功({len(imgList)}张)"
+    except Exception as e:
+        print(f"[Error] {str(e)}")
+        return f"[Error] {str(e)}"
+
+
 def getImg(title: str) -> str:
     try:
         with open("images.json", "r", encoding="UTF-8") as f:
@@ -106,6 +121,29 @@ def getImg(title: str) -> str:
         
     except Exception as e:
         return "获取图片错误"
+    
+
+def getImgInfo() -> str:
+    try:
+        with open("images.json", "r", encoding="UTF-8") as f:
+            data = json.load(f)
+
+        info = "图片列表: \n"
+        lst = []
+        for repo in data.keys():
+            lst.append((repo, len(data[repo])))
+
+        lst.sort(key=lambda x: x[1], reverse=True)
+
+        for repo, count in lst:
+            info += f"[{repo}]: {count}\n"
+
+        return info.strip()
+
+    except Exception as e:
+        return "获取图片列表错误"
+    
+
 
 
 def delImg(img: str, repo: str) -> str:
