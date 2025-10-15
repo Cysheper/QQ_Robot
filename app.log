@@ -90,3 +90,11 @@
 2025-10-13 14:13:36 INFO - 3951373455
 2025-10-13 14:14:48 INFO - 3951373455
 2025-10-13 14:18:59 INFO - 3951373455
+2025-10-15 12:18:52 ERROR - 获取用户QQ错误
+2025-10-15 12:20:40 INFO - 3951373455
+2025-10-15 12:27:51 INFO - HTTP Request: POST https://ark.cn-beijing.volces.com/api/v3/chat/completions "HTTP/1.1 200 OK"
+2025-10-15 12:28:18 INFO - 记忆已清除
+2025-10-15 12:28:18 INFO - 已切换模式: Default
+2025-10-15 12:28:36 INFO - HTTP Request: POST https://ark.cn-beijing.volces.com/api/v3/chat/completions "HTTP/1.1 200 OK"
+2025-10-15 12:28:45 INFO - HTTP Request: POST https://ark.cn-beijing.volces.com/api/v3/chat/completions "HTTP/1.1 200 OK"
+2025-10-15 12:29:03 INFO - HTTP Request: POST https://ark.cn-beijing.volces.com/api/v3/chat/completions "HTTP/1.1 200 OK"

@@ -42,7 +42,7 @@ def configMessage(messages, myQQ):
 def routers(message, sender, replyID):
     image_url, respond = None, None
     if replyID != None:
-        msg, img_url = GetAndPost.getReply(replyID)
+        msg, img = GetAndPost.getReply(replyID)
         if msg != None: message += " " + msg
 
 
@@ -50,11 +50,11 @@ def routers(message, sender, replyID):
         respond = ChangeMod.changeMod(message[2:].strip())
 
 
-    elif message[:2] == "添加" and img_url != None:
-        if type(img_url) == str:
-            respond = ContorlImages.saveImg(img_url, message[2:].strip())
+    elif message[:2] == "添加" and img != None:
+        if type(img) == str:
+            respond = ContorlImages.saveImg(img, message[2:].strip())
         else:
-            respond = ContorlImages.saveImgByGroup(img_url, message[2:].strip())
+            respond = ContorlImages.saveImgByGroup(img, message[2:].strip())
 
 
     elif message[:2] == "来只":
@@ -63,11 +63,12 @@ def routers(message, sender, replyID):
             respond = image_url
             image_url = None
             
+            
     elif message[:4] == "图片信息":
         respond = ContorlImages.getImgInfo()
 
-    elif message[:2] == "删除" and img_url != None:
-        respond = ContorlImages.delImg(img_url, message[2:].strip())
+    elif message[:2] == "删除" and img != None:
+        respond = ContorlImages.delImg(img, message[2:].strip())
 
 
     elif message == "help":
@@ -113,8 +114,8 @@ def routers(message, sender, replyID):
         image_url, respond = Jinman.getJinmanImageUrlBySeed(int(message[2:].strip()))
 
 
-    elif replyID != None and image_url != None:
-        respond = DouBao.ask_vision(image_url, message, sender)
+    elif replyID != None and img != None:
+        respond = DouBao.ask_vision(img, message, sender)
 
 
     else: respond = AIChat.ask(message, sender)
