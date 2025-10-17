@@ -24,17 +24,17 @@ my_token = config["GitHub_Token"]
 
 
 def saveImg(img: str, title: str) -> str:
+
     try:
-        # 获取图片数据
-        response = requests.get(img)
-        img_data = response.content
-        # 转化为Base64
-        b64 = base64.b64encode(img_data).decode('utf-8')
-        img_hash = hashlib.md5(img_data).hexdigest()
+            # 获取图片数据
+            response = requests.get(img)
+            img_data = response.content
+            # 转化为Base64
+            b64 = base64.b64encode(img_data).decode('utf-8')
+            img_hash = hashlib.md5(img_data).hexdigest()
     except Exception as e:
         logging.error("[Error] 下载图片错误")
         return "[Error] 下载图片错误"
-    
     try:
         # 获取时间戳
         timestamp = time.strftime("%Y%m%d_%H%M%S")  # 例如 20251007_235959
@@ -43,6 +43,7 @@ def saveImg(img: str, title: str) -> str:
         filename = f"{title}_{timestamp}"
 
         # 图片格式
+        
         content_type = response.headers.get("Content-Type", "")
         if "/" in content_type:
             ext = content_type.split("/")[-1]
@@ -62,7 +63,7 @@ def saveImg(img: str, title: str) -> str:
             "content": b64,
             "branch": "master"
         }
-
+        print("Posting Anime Image to Gitee...")
         r = requests.post(api, json=data)
         if r.status_code != 201:
             raise Exception(f"{r.status_code} 上传异常")
@@ -75,7 +76,7 @@ def saveImg(img: str, title: str) -> str:
     try:
         print(title)
         
-        with open("images.json", "r", encoding="UTF-8") as f:
+        with open(f"images.json", "r", encoding="UTF-8") as f:
             data = json.load(f)
 
         if title not in data:
@@ -83,7 +84,7 @@ def saveImg(img: str, title: str) -> str:
 
         data[title][imageUrl] = img_hash
 
-        with open("images.json", "w", encoding="UTF-8") as f:
+        with open(f"images.json", "w", encoding="UTF-8") as f:
             json.dump(data, f, ensure_ascii=False, indent=4)
 
     except Exception as e:

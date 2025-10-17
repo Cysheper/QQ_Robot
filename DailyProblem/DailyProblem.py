@@ -18,7 +18,6 @@ logging.basicConfig(
 )
 
 
-
 with open("config.json", "r", encoding="UTF-8") as f:
     config = json.load(f)
 
@@ -61,22 +60,22 @@ def randomProblem(difficulty: int):
     return problem
 
 def capture_webpage(url: str, save_path: str = "", full_page: bool = True):
-  with sync_playwright() as p:
-      browser = p.chromium.launch(headless=True)
-      page = browser.new_page()
-      page.goto(url, wait_until="networkidle")  # 等待页面加载完成
-      png_bytes = page.screenshot(full_page=full_page)
-      browser.close()
+    with sync_playwright() as p:
+        browser = p.chromium.launch(headless=True)
+        page = browser.new_page()
+        page.goto(url, timeout= 60000, wait_until="networkidle")  # 等待页面加载完成
+        png_bytes = page.screenshot(full_page=full_page)
+        browser.close()
 
-  # 转 Base64
-  img_base64 = base64.b64encode(png_bytes).decode("utf-8")
+    # 转 Base64
+    img_base64 = base64.b64encode(png_bytes).decode("utf-8")
 
-  # 可选保存本地
-  if save_path != "":
-      with open(save_path, "wb") as f:
-          f.write(png_bytes)
+    # 可选保存本地
+    if save_path != "":
+        with open(save_path, "wb") as f:
+            f.write(png_bytes)
 
-  return img_base64
+    return img_base64
 
 
 

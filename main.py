@@ -12,6 +12,7 @@ import requests
 from DouBao import DouBao
 from DailyProblem import DailyProblem
 from Jinman import Jinman
+from UserApi import delList
 
 # 加载配置文件
 
@@ -39,7 +40,7 @@ def configMessage(messages, myQQ):
     message = message.strip()
     return hasAtMe, message, replyID
 
-def routers(message, sender, replyID):
+def routers(message, sender, replyID, group_id):
     image_url, respond = None, None
     if replyID != None:
         msg, img = GetAndPost.getReply(replyID)
@@ -91,7 +92,7 @@ def routers(message, sender, replyID):
 7、洛谷 - 随机难度洛谷题目，需要一定加载时间 （洛谷题目每两分钟是同一题）
 8、洛谷[难度] - 指定难度洛谷题目，根据颜色划分，红题、橙题、黑题什么的（洛谷题目每两分钟是同一题）
 8、除了上述指令外，其余指令将由AI接管回答，AI不知道其余指令，AI不可发出其余指令
-                """
+"""
         respond = msg
 
 
@@ -113,6 +114,14 @@ def routers(message, sender, replyID):
     elif message[:2] == "禁漫" and message[2:].strip().isdigit():
         image_url, respond = Jinman.getJinmanImageUrlBySeed(int(message[2:].strip()))
 
+    elif message[:6] == "撤回名单展示":
+        respond = delList.showDel()
+    
+    elif message[:6] == "撤回名单添加":
+        respond = delList.addDel(message[6:].strip())
+
+    elif message[:6] == "撤回名单删除":
+        respond = delList.moveDel(message[6:].strip())
 
     elif replyID != None and img != None:
         respond = DouBao.ask_vision(img, message, sender)
@@ -136,22 +145,30 @@ def problemLimit() -> bool:
 
 def task(id: int, message, sender, replyID):
     print("task running")
-    answer, image = routers(message, sender, replyID)
+
+    answer, image = routers(message, sender, replyID, id)
+
+
     if answer != None and image == None:
         if not GetAndPost.postMessage(id, answer):
             logging.error(f"PostMessage Error : {message}")
             print("[PostMessage Error]")
+
+
     if image != None and answer == None:
-        delList = ["大雷", "小雷", "白丝", "黑丝", "色图", "涩图"]
-        if message[2:] in delList :
+        if message[2:] in delList.List:
             msg = GetAndPost.postImg(id, image, True)
+
         else: msg = GetAndPost.postImg(id, image, False)
+
         if msg != "[Accepted]":
             logging.error(f"PostImage Error : {message}")
             print("[PostImage Error]")
             if not GetAndPost.postMessage(id, msg):
                 logging.error(f"PostMessage Error : {message}")
                 print("[PostMessage Error]")
+
+
     if image != None and answer != None:
         msg = GetAndPost.postImgAndMessage(id, image, answer)
         if msg != "[Accepted]":
