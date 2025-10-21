@@ -15,4 +15,6 @@ __pycache__/
 # 杂项
 *.log
 *.tmp
-*.json
+config.json
+images.json
+
