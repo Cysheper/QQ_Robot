@@ -5,7 +5,7 @@ __pycache__/
 *.so
 
 # 环境
-venv/
+.venv/
 .env/
 
 # 编辑器
