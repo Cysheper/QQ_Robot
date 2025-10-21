@@ -11,7 +11,7 @@ import queue
 import requests
 from DouBao import DouBao
 from DailyProblem import DailyProblem
-from Jinman import Jinman
+from JMComic import Jinman
 from UserApi import delList
 
 # 加载配置文件
@@ -122,6 +122,9 @@ def routers(message, sender, replyID, group_id):
 
     elif message[:6] == "撤回名单删除":
         respond = delList.moveDel(message[6:].strip())
+
+    elif message[:4] == "禁漫下载":
+        Jinman.task(group_id, message[4:].strip())
 
     elif replyID != None and img != None:
         respond = DouBao.ask_vision(img, message, sender)

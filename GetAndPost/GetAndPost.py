@@ -159,3 +159,49 @@ def delMessage(message_id):
     except Exception as e:
         logging.error(f"图片撤回失败：{str(e)}")
         print("[Error] NetWork Error")
+
+
+
+def postJMComic(group_id: int, num: str, comic_name: str) -> str:
+    payload = {
+        "group_id": group_id,
+        "message": [
+        {
+            "type": "node",
+            "data": {
+                "content": [
+                    {
+                        "type": "text",
+                        "data": {
+                            "text": comic_name
+                        }
+                    }
+                ]
+            }
+        },
+        {
+            "type": "node",
+            "data": {
+                "content": [
+                { 
+                    "type": "file", 
+                    "data": { 
+                        "file": f"E:\\Code\\Python\\QQ_Robot\\{num}.pdf" 
+                    } 
+                }
+                ]
+            }
+        }
+        ]
+    }
+    try:
+        info = requests.post(f"{url}/send_group_forward_msg", json=payload).json()
+    except Exception as e:
+        logging.error(f"Network Error: {str(e)}")
+        return "Network Error"
+    if info["status"] == "ok":
+        return "[Accepted]"
+    
+    else:
+        logging.error("PostJMComic Error")
+        return "[Error] Post JMComic Error"

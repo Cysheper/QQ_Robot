@@ -1,0 +1,18 @@
+download:
+  image:
+    suffix: .png # 该配置用于把下载的图片转为png格式
+
+
+
+dir_rule: # 忽略base_dir配置项
+  rule: Bd_Pmyname # A表示本子，myname表示本子的一个自定义字段
+
+
+
+plugins:
+  after_photo:
+    - plugin: img2pdf
+      kwargs:
+        filename_rule: Pid # pdf命名规则，P代表photo, id代表使用photo.id也就是章节id
+        
+        

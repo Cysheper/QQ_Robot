@@ -16,3 +16,6 @@ markdown>=3.9
 
 # 网页自动化
 playwright>=1.55.0
+
+# JM Comics API
+jmcomic>=2.6.9
