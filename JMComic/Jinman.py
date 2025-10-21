@@ -1,8 +1,9 @@
 import random
 import json
-import jmcomic as jm
+import jmcomic
+from jmcomic import JmModuleConfig, JmOption, JmAlbumDetail
+
 import shutil
-from jmcomic import * # type: ignore
 from GetAndPost import GetAndPost
 
 # Pmyname
@@ -22,9 +23,9 @@ def getJinmanImageUrlRand() -> tuple[str, str]:
 
 
 def downloadJMComics(num: str) -> None:
-    option = jm.create_option_by_file("JMComic/option.yml")
+    option = jmcomic.create_option_by_file("JMComic/option.yml")
 
-    jm.download_photo(num, option=option)
+    jmcomic.download_photo(num, option=option)
 
 def task(group_id: int, num: str) -> None:
     GetAndPost.postMessage(group_id, f"【已开始下载】JM{num}， 请耐心等待...")
