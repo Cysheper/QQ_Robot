@@ -62,9 +62,11 @@ def task1(group_id: int, num: str) -> None:
     #    GetAndPost.postMessage(group_id, f"【下载完成】JM{num}: {comic_name}")
     #else:
     #    GetAndPost.postMessage(group_id, f"【下载失败】JM{num}: {comic_name}")
-    shutil.rmtree(num, ignore_errors=True)
 
-    os.remove(f"{num}.pdf")
+    if os.path.exists(num):
+        shutil.rmtree(num, ignore_errors=True)
+    if os.path.exists(f"{num}.pdf"):
+        os.remove(f"{num}.pdf")
 
 def task2(group_id: int, num: str) -> None:
     # GetAndPost.postMessage(group_id, f"【已开始下载】JM{num}， 请耐心等待...")
@@ -83,5 +85,5 @@ def task2(group_id: int, num: str) -> None:
 
 
 if __name__ == "__main__":
-    # task1(123, "575060")
+    task1(686822576, "575060")
     task2(686822576, "575060")

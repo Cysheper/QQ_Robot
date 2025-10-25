@@ -8,6 +8,7 @@ import logging
 import random
 from itertools import islice
 from Update2OSS import Update2OSS
+import os
 
 logging.basicConfig(
     filename='app.log',         # 日志文件名
@@ -49,14 +50,26 @@ def task(group_id: int, num: str) -> None:
         comic_name = comic_data[num]
         print("漫画已存在，跳过下载步骤。")
     else:
-        print("正在下载JM漫画...")
-        downloadJMComics(num)
-        page = client.search_site(search_query=num)
-        album: JmAlbumDetail = page.single_album
-        comic_name = album.authoroname
-        print("正在上传JM漫画到OSS...")
-        Update2OSS.upload_file(f"QQBot/JMComic/{num}.pdf", f"{num}.pdf")
-        print("上传完成。")
+        try:
+            print("正在下载JM漫画...")
+            downloadJMComics(num)
+            page = client.search_site(search_query=num)
+            album: JmAlbumDetail = page.single_album
+            comic_name = album.authoroname
+
+        except Exception as e:
+            logging.error(f"Error in downloading JM comic {num}: {e}")
+            GetAndPost.postMessage(group_id, f"【下载失败】JM{num}，下载过程错误")
+            return
+        try:
+            print("正在上传JM漫画到OSS...")
+            Update2OSS.upload_file(f"QQBot/JMComic/{num}.pdf", f"{num}.pdf")
+            print("上传完成。")
+        
+        except Exception as e:
+            logging.error(f"Error in downloading or uploading JM comic {num}: {e}")
+            GetAndPost.postMessage(group_id, f"【下载失败】JM{num}，上传OSS过程错误")
+            return
 
         with open("comic.json", "w", encoding="utf-8") as f:
             comic_data[num] = comic_name
@@ -71,10 +84,13 @@ def task(group_id: int, num: str) -> None:
     if info == "[Accepted]":
         GetAndPost.postMessage(group_id, f"【下载完成】JM{num}: {comic_name}")
     else:
-        GetAndPost.postMessage(group_id, f"【下载失败】JM{num}: {comic_name}")
-    shutil.rmtree(num, ignore_errors=True)
-    import os
-    os.remove(f"{num}.pdf")
+        GetAndPost.postMessage(group_id, f"【下载失败】JM{num}，上传QQ过程错误")
+
+
+    if os.path.exists(num):
+        shutil.rmtree(num, ignore_errors=True)
+    if os.path.exists(f"{num}.pdf"):
+        os.remove(f"{num}.pdf")
 
 
 
