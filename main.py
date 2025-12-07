@@ -123,9 +123,6 @@ def routers(message, sender, replyID, group_id):
     elif message[:6] == "撤回名单删除":
         respond = delList.moveDel(message[6:].strip())
 
-    elif message[:4] == "禁漫下载":
-        Jinman.task(group_id, message[4:].strip())
-
     elif replyID != None and img != None:
         respond = DouBao.ask_vision(img, message, sender)
 

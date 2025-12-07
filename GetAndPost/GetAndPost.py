@@ -162,7 +162,7 @@ def delMessage(message_id):
 
 
 
-def postJMComic(group_id: int, num: str, comic_name: str) -> str:
+def postJMComic(group_id: int, pdf_url: str, comic_name: str, num: str) -> str:
     payload = {
         "group_id": group_id,
         "message": [
@@ -186,7 +186,8 @@ def postJMComic(group_id: int, num: str, comic_name: str) -> str:
                 { 
                     "type": "file", 
                     "data": { 
-                        "file": f"E:\\Code\\Python\\QQ_Robot\\{num}.pdf" 
+                        "file": pdf_url,
+                        "name": f"{num}.pdf"
                     } 
                 }
                 ]
