@@ -10,6 +10,7 @@ lxml>=6.0.2
 
 # 图像处理
 html2image>=2.0.7
+image2pdf>=0.1.5
 
 # 文档处理
 markdown>=3.9
